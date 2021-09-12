@@ -315,7 +315,7 @@
 // @section info
 
 // Author info of this build printed to the host during boot and M115
-#define STRING_CONFIG_H_AUTHOR "TinyMachines3D" // Who made the changes.
+#define STRING_CONFIG_H_AUTHOR "TinyMachines3D <- L'Kayne" // Who made the changes.
 #define CUSTOM_VERSION_FILE Version.h // Path from the root directory (no quotes)
 
 /**
@@ -1245,9 +1245,12 @@
       #define DEFAULT_Kd 54.3
     #elif ENABLED(HotendStock)
       #if ANY(MachineCR10SPro, MachineCR10Max)
-        #define DEFAULT_Kp 25.25
-        #define DEFAULT_Ki 2.17
-        #define DEFAULT_Kd 73.44
+        #define DEFAULT_Kp 23.50
+        #define DEFAULT_Ki 2.12
+        #define DEFAULT_Kd 65.01
+        // #define DEFAULT_Kp 25.25
+        // #define DEFAULT_Ki 2.17
+        // #define DEFAULT_Kd 73.44
       #elif ENABLED(MachineEnder5Plus)
         #define  DEFAULT_Kp 14.72
         #define  DEFAULT_Ki 0.89
@@ -1346,9 +1349,12 @@
     #define DEFAULT_bedKi 1.17
     #define DEFAULT_bedKd 1349.52
   #else
-    #define  DEFAULT_bedKp 690.34
-    #define  DEFAULT_bedKi 111.47
-    #define  DEFAULT_bedKd 1068.83
+    #define  DEFAULT_bedKp 79.17
+    #define  DEFAULT_bedKi 12.07
+    #define  DEFAULT_bedKd 346.04
+    // #define  DEFAULT_bedKp 690.34
+    // #define  DEFAULT_bedKi 111.47
+    // #define  DEFAULT_bedKd 1068.83
   #endif
 
   // FIND YOUR OWN: "M303 E-1 C8 S90" to run autotune on the bed at 90 degreesC for 8 cycles.
@@ -1773,10 +1779,10 @@
   #define DEFAULT_TRAVEL_ACCELERATION   300    // X, Y, Z acceleration for travel (non printing) moves
 #elif (ANY(MachineCR10SPro, MachineCR6, MachineCR6Max))
   #define DEFAULT_MAX_FEEDRATE          { 500, 500, 10, 70 }
-  #define DEFAULT_MAX_ACCELERATION      { 750, 750, 100, 60 }
-  #define DEFAULT_ACCELERATION          750    // X, Y, Z and E acceleration for printing moves
+  #define DEFAULT_MAX_ACCELERATION      { 850, 850, 100, 60 }
+  #define DEFAULT_ACCELERATION          850    // X, Y, Z and E acceleration for printing moves
   #define DEFAULT_RETRACT_ACCELERATION  1000    // E acceleration for retracts
-  #define DEFAULT_TRAVEL_ACCELERATION   300    // X, Y, Z acceleration for travel (non printing) moves
+  #define DEFAULT_TRAVEL_ACCELERATION   850    // X, Y, Z acceleration for travel (non printing) moves
 #elif (ENABLED(MachineCR10Std))
   #define DEFAULT_MAX_FEEDRATE          { 500, 500, 10, 75 }
   #define DEFAULT_MAX_ACCELERATION      { 1500, 1500, 100, 75 }
@@ -1839,7 +1845,7 @@
  */
 #define CLASSIC_JERK
 #if ENABLED(CLASSIC_JERK)
-  #define DEFAULT_XJERK 10.0
+  #define DEFAULT_XJERK 15.0
   #define DEFAULT_YJERK 5.0
   #define DEFAULT_ZJERK  0.3
   //#define DEFAULT_IJERK  0.3
@@ -2094,7 +2100,7 @@
      #define NOZZLE_TO_PROBE_OFFSET { -44, -10, 0 }
    #endif
 #elif ANY(MachineCR10SPro, MachineCR10Max) && ENABLED(HotendStock) && DISABLED(MicroswissDirectDrive)
-  #define NOZZLE_TO_PROBE_OFFSET { -27, 0, 0 }
+  #define NOZZLE_TO_PROBE_OFFSET { -30, -2, 0 }
 #elif (ANY(ABL_BLTOUCH, ABL_EZABL,ABL_NCSW) && ENABLED(E3DHemera))
     #define NOZZLE_TO_PROBE_OFFSET { -40, 0, 0 }
 #elif ENABLED(MachineCR10SV2)
@@ -2205,14 +2211,14 @@
 #if ENABLED(MachineEnder5)
   #define Z_CLEARANCE_DEPLOY_PROBE   0 // Z Clearance for Deploy/Stow
 #else
-  #define Z_CLEARANCE_DEPLOY_PROBE   10 // Z Clearance for Deploy/Stow
+  #define Z_CLEARANCE_DEPLOY_PROBE   5 // Z Clearance for Deploy/Stow
 #endif
 #if ANY(MachineCR6, MachineCR6Max)
   #define Z_CLEARANCE_BETWEEN_PROBES  3 // Z Clearance between probe points
   #define Z_CLEARANCE_MULTI_PROBE     3 // Z Clearance between multiple probes
 #else
-  #define Z_CLEARANCE_BETWEEN_PROBES  5 // Z Clearance between probe points
-  #define Z_CLEARANCE_MULTI_PROBE     5 // Z Clearance between multiple probes
+  #define Z_CLEARANCE_BETWEEN_PROBES  2 // Z Clearance between probe points
+  #define Z_CLEARANCE_MULTI_PROBE     2 // Z Clearance between multiple probes
 #endif
 #if DISABLED(TOUCH_MI_PROBE)
   #define Z_AFTER_PROBING           5 // Z position after probing is done
@@ -2493,9 +2499,9 @@
   #elif ENABLED(MachineCR10SProV2)
     #define X_BED_SIZE 300
     #define Y_BED_SIZE 300
-    #define Z_MAX_POS 400
-    #define X_MAX_POS 315
-    #define Y_MAX_POS 310
+    #define Z_MAX_POS 340
+    #define X_MAX_POS 302
+    #define Y_MAX_POS 280
     #define ClipClearance 5
   #elif ENABLED(MachineCR10SPro)
     #define X_BED_SIZE 300
@@ -2561,7 +2567,7 @@
   #define Y_MIN_POS -3
 #else
   #define X_MIN_POS 0
-  #define Y_MIN_POS 0
+  #define Y_MIN_POS -20
 #endif
 #define Z_MIN_POS 0
 #ifndef X_MAX_POS
@@ -3143,7 +3149,7 @@
 #if(ENABLED(MachineEnder2))
   #define NOZZLE_PARK_POINT { (0), (0), 10 }
 #else
-  #define NOZZLE_PARK_POINT { (50), (10), 10 }
+  #define NOZZLE_PARK_POINT { (50), (20), 5 }
 #endif
 
   //#define NOZZLE_PARK_X_ONLY          // X move only is required to park
