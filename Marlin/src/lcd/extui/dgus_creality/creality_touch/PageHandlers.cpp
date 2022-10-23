@@ -82,74 +82,76 @@ void SetupMenuHandler(DGUS_VP_Variable &var, unsigned short buttonValue) {
     }
 }
 
-void LevelingModeHandler(DGUS_VP_Variable &var, unsigned short buttonValue) {
-    switch (var.VP) {
-        case VP_BUTTON_BEDLEVELKEY:
-            switch (buttonValue) {
-                case 1:
-                    queue.enqueue_one("G28 U0");
-                    queue.enqueue_one("G0 Z0");
-                break;
+#if HAS_MESH
+  void LevelingModeHandler(DGUS_VP_Variable &var, unsigned short buttonValue) {
+      switch (var.VP) {
+          case VP_BUTTON_BEDLEVELKEY:
+              switch (buttonValue) {
+                  case 1:
+                      queue.enqueue_one("G28 U0");
+                      queue.enqueue_one("G0 Z0");
+                  break;
 
-                case 2:
-                    // Increase Z-offset
-                    ExtUI::smartAdjustAxis_steps(ExtUI::mmToWholeSteps(0.01, ExtUI::axis_t::Z), ExtUI::axis_t::Z, true);;
-                    ScreenHandler.ForceCompleteUpdate();
-                    ScreenHandler.RequestSaveSettings();
-                    break;
+                  case 2:
+                      // Increase Z-offset
+                      ExtUI::smartAdjustAxis_steps(ExtUI::mmToWholeSteps(0.01, ExtUI::axis_t::Z), ExtUI::axis_t::Z, true);;
+                      ScreenHandler.ForceCompleteUpdate();
+                      ScreenHandler.RequestSaveSettings();
+                      break;
 
-                case 3:
-                    // Decrease Z-offset
-                    ExtUI::smartAdjustAxis_steps(ExtUI::mmToWholeSteps(-0.01, ExtUI::axis_t::Z), ExtUI::axis_t::Z, true);;
-                    ScreenHandler.ForceCompleteUpdate();
-                    ScreenHandler.RequestSaveSettings();
-                    break;
-            }
+                  case 3:
+                      // Decrease Z-offset
+                      ExtUI::smartAdjustAxis_steps(ExtUI::mmToWholeSteps(-0.01, ExtUI::axis_t::Z), ExtUI::axis_t::Z, true);;
+                      ScreenHandler.ForceCompleteUpdate();
+                      ScreenHandler.RequestSaveSettings();
+                      break;
+              }
 
-            break;
+              break;
 
-        case VP_BUTTON_PREPAREENTERKEY:
-            if (buttonValue == 9) {
-                #if DISABLED(HOTEND_IDLE_TIMEOUT)
-                    thermalManager.disable_all_heaters();
-                #endif
+          case VP_BUTTON_PREPAREENTERKEY:
+              if (buttonValue == 9) {
+                  #if DISABLED(HOTEND_IDLE_TIMEOUT)
+                      thermalManager.disable_all_heaters();
+                  #endif
 
-                ScreenHandler.GotoScreen(DGUSLCD_SCREEN_MAIN, false);
-            }
+                  ScreenHandler.GotoScreen(DGUSLCD_SCREEN_MAIN, false);
+              }
 
-            if (buttonValue == 1) {
-                // TODO: set state for "view leveling mesh"
-                ScreenHandler.SetViewMeshLevelState();
-                ScreenHandler.InitMeshValues();
+              if (buttonValue == 1) {
+                  // TODO: set state for "view leveling mesh"
+                  ScreenHandler.SetViewMeshLevelState();
+                  ScreenHandler.InitMeshValues();
 
-                ScreenHandler.GotoScreen(DGUSLCD_SCREEN_LEVELING);
-            }
-            break;
+                  ScreenHandler.GotoScreen(DGUSLCD_SCREEN_LEVELING);
+              }
+              break;
 
-        case VP_BUTTON_MAINENTERKEY:
-            // Go to leveling screen
-            ExtUI::injectCommands_P("G28 U0\nG29 U0");
+          case VP_BUTTON_MAINENTERKEY:
+              // Go to leveling screen
+              ExtUI::injectCommands_P("G28 U0\nG29 U0");
 
-            ScreenHandler.ResetMeshValues();
+              ScreenHandler.ResetMeshValues();
 
-            dgusdisplay.WriteVariable(VP_MESH_SCREEN_MESSAGE_ICON, static_cast<uint16_t>(MESH_SCREEN_MESSAGE_ICON_LEVELING));
-            ScreenHandler.GotoScreen(DGUSLCD_SCREEN_LEVELING);
-            break;
-    }
-}
+              dgusdisplay.WriteVariable(VP_MESH_SCREEN_MESSAGE_ICON, static_cast<uint16_t>(MESH_SCREEN_MESSAGE_ICON_LEVELING));
+              ScreenHandler.GotoScreen(DGUSLCD_SCREEN_LEVELING);
+              break;
+      }
+  }
 
-void LevelingHandler(DGUS_VP_Variable &var, unsigned short buttonValue) {
-    switch (var.VP) {
-        case VP_BUTTON_BEDLEVELKEY:
-          const bool busy = TERN0(HOST_KEEPALIVE_FEATURE, ((ExtUI::getHostKeepaliveState() == GcodeSuite::MarlinBusyState::IN_PROCESS) || (ExtUI::getHostKeepaliveState() == GcodeSuite::MarlinBusyState::IN_HANDLER)));
-            if (!busy) {
-                ScreenHandler.PopToOldScreen();
-            } else {
-                ScreenHandler.setstatusmessagePGM("Wait for leveling completion...");
-            }
-            break;
-    }
-}
+  void LevelingHandler(DGUS_VP_Variable &var, unsigned short buttonValue) {
+      switch (var.VP) {
+          case VP_BUTTON_BEDLEVELKEY:
+            const bool busy = TERN0(HOST_KEEPALIVE_FEATURE, ((ExtUI::getHostKeepaliveState() == GcodeSuite::MarlinBusyState::IN_PROCESS) || (ExtUI::getHostKeepaliveState() == GcodeSuite::MarlinBusyState::IN_HANDLER)));
+              if (!busy) {
+                  ScreenHandler.PopToOldScreen();
+              } else {
+                  ScreenHandler.setstatusmessagePGM("Wait for leveling completion...");
+              }
+              break;
+      }
+  }
+#endif
 
 void TempMenuHandler(DGUS_VP_Variable &var, unsigned short buttonValue) {
     switch (var.VP) {
@@ -220,6 +222,25 @@ void PrepareMenuHandler(DGUS_VP_Variable &var, unsigned short buttonValue) {
 
 void TuneMenuHandler(DGUS_VP_Variable &var, unsigned short buttonValue) {
     switch (var.VP) {
+        case VP_BUTTON_BEDLEVELKEY:
+            switch (buttonValue) {
+                case 2:
+                    // Increase Z-offset
+                    ExtUI::smartAdjustAxis_steps(ExtUI::mmToWholeSteps(0.01, ExtUI::axis_t::Z), ExtUI::axis_t::Z, true);;
+                    ScreenHandler.ForceCompleteUpdate();
+                    ScreenHandler.RequestSaveSettings();
+                    break;
+
+                case 3:
+                    // Decrease Z-offset
+                    ExtUI::smartAdjustAxis_steps(ExtUI::mmToWholeSteps(-0.01, ExtUI::axis_t::Z), ExtUI::axis_t::Z, true);;
+                    ScreenHandler.ForceCompleteUpdate();
+                    ScreenHandler.RequestSaveSettings();
+                    break;
+            }
+
+            break;
+
         case VP_BUTTON_ADJUSTENTERKEY:
             switch (buttonValue) {
                 case 2:
@@ -244,7 +265,7 @@ void PrintRunningMenuHandler(DGUS_VP_Variable &var, unsigned short buttonValue) 
         break;
 
         case VP_BUTTON_PAUSEPRINTKEY:
-          if (!ScreenHandler.HandlePendingUserConfirmation()) {
+          if (!ScreenHandler.HandlePendingUserConfirmation() && ExtUI::isPrintingPaused()) {
             ExtUI::resumePrint();
             ScreenHandler.GotoScreen(DGUSLCD_SCREEN_PRINT_RUNNING);
           } else
@@ -395,8 +416,10 @@ const struct PageHandler PageHandlers[] PROGMEM = {
 
     PAGE_HANDLER(DGUSLCD_Screens::DGUSLCD_SCREEN_SETUP, SetupMenuHandler)
 
-    PAGE_HANDLER(DGUSLCD_Screens::DGUSLCD_SCREEN_ZOFFSET_LEVEL, LevelingModeHandler)
-    PAGE_HANDLER(DGUSLCD_Screens::DGUSLCD_SCREEN_LEVELING, LevelingHandler)
+    #if HAS_MESH
+      PAGE_HANDLER(DGUSLCD_Screens::DGUSLCD_SCREEN_ZOFFSET_LEVEL, LevelingModeHandler)
+      PAGE_HANDLER(DGUSLCD_Screens::DGUSLCD_SCREEN_LEVELING, LevelingHandler)
+    #endif
 
     PAGE_HANDLER(DGUSLCD_Screens::DGUSLCD_SCREEN_TEMP, TempMenuHandler)
     PAGE_HANDLER(DGUSLCD_Screens::DGUSLCD_SCREEN_TEMP_PLA, PreheatSettingsScreenHandler)

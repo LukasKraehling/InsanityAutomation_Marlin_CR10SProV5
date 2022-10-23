@@ -52,9 +52,9 @@
 #if ENABLED(I2C_EEPROM)
   #define IIC_EEPROM_SDA                    PB7
   #define IIC_EEPROM_SCL                    PB6
-  #define MARLIN_EEPROM_SIZE              0x1000  // 4KB
+  #define MARLIN_EEPROM_SIZE              0x1000  // 4K
 #elif ENABLED(SDCARD_EEPROM_EMULATION)
-  #define MARLIN_EEPROM_SIZE              0x1000  // 4KB
+  #define MARLIN_EEPROM_SIZE              0x1000  // 4K
 #endif
 
 //
@@ -70,9 +70,14 @@
 //
 // Probe
 //
-#define PROBE_TARE_PIN                      PA1
+#ifndef PROBE_TARE_PIN
+  #define PROBE_TARE_PIN                    PA1
+#endif
+
 #if ENABLED(PROBE_ACTIVATION_SWITCH)
-  #define PROBE_ACTIVATION_SWITCH_PIN       PC2   // Optoswitch to Enable Z Probe
+  #ifndef PROBE_ACTIVATION_SWITCH_PIN
+    #define PROBE_ACTIVATION_SWITCH_PIN     PC2   // Optoswitch to Enable Z Probe
+  #endif
 #endif
 
 //
@@ -108,7 +113,7 @@
 #define HEATER_BED_PIN                      PC9   // HOT BED
 
 #define FAN_PIN                             PC6   // FAN
-#define FAN_SOFT_PWM
+#define FAN_SOFT_PWM_REQUIRED
 
 #define CONTROLLER_FAN_PIN                  PC7
 

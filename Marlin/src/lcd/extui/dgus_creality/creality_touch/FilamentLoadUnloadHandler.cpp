@@ -42,7 +42,7 @@ void FilamentLoadUnloadHandler::HandleLoadUnloadButton(DGUS_VP_Variable &var, vo
     }
 
     if (ExtUI::isPrinting() && !ExtUI::isPrintingPaused()) {
-        SetStatusMessage(PSTR("Please pause print first"));
+        SetStatusMessage(PSTR("Finish Printing First"));
         return;
     }
 

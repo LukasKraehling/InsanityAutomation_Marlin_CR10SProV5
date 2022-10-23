@@ -47,9 +47,9 @@
 #if ENABLED(IIC_BL24CXX_EEPROM)
   #define IIC_EEPROM_SDA                    PA11
   #define IIC_EEPROM_SCL                    PA12
-  #define MARLIN_EEPROM_SIZE               0x800  // 2Kb (24C16)
+  #define MARLIN_EEPROM_SIZE               0x800  // 2K (24C16)
 #elif ENABLED(SDCARD_EEPROM_EMULATION)
-  #define MARLIN_EEPROM_SIZE               0x800  // 2Kb
+  #define MARLIN_EEPROM_SIZE               0x800  // 2K
 #endif
 
 //
@@ -64,7 +64,15 @@
 //
 // Probe
 //
-#define PROBE_TARE_PIN                      PA5
+#if ENABLED(NOZZLE_AS_PROBE)
+  #ifndef PROBE_TARE_PIN
+    #define PROBE_TARE_PIN                  PA5
+  #endif
+#else
+  #ifndef SERVO0_PIN
+    #define SERVO0_PIN                      PA5
+  #endif
+#endif
 
 //
 // Steppers
@@ -95,7 +103,7 @@
 // Heaters / Fans
 //
 
-#define FAN_SOFT_PWM
+#define FAN_SOFT_PWM_REQUIRED
 
 //
 // SD Card
@@ -110,3 +118,5 @@
 // Misc. Functions
 //
 #define CASE_LIGHT_PIN                      PA6
+
+#define LED_PIN                             PA6

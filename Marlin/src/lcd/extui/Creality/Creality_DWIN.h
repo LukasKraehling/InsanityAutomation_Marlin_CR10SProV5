@@ -79,6 +79,10 @@ namespace ExtUI {
 #define	FanKeyIcon			0x101E
 #define Flowrate        0x1300
 
+#define RunoutToggle    0x1018
+#define PowerLossToggle 0x101A
+#define LedToggle       0x101C
+
 #define StepMM_X      0x1242
 #define StepMM_Y      0x1246
 #define StepMM_Z      0x124A
@@ -87,6 +91,13 @@ namespace ExtUI {
 #define ProbeOffset_X  0x1236
 #define ProbeOffset_Y  0x123A
 #define ProbeOffset_Z  0x1026
+
+#define T2Offset_X    0x1090
+#define T2Offset_Y    0x1092
+#define T2Offset_Z    0x1094
+#define T2StepMM_E    0x1096
+
+#define ActiveToolVP  0x1014
 
 #define HotendPID_AutoTmp 0x1252
 #define BedPID_AutoTmp    0x1254
@@ -117,11 +128,14 @@ namespace ExtUI {
 
 #define	HeatPercentIcon		0x1024
 
-#define	NzBdSet				0x1032
-#define	NozzlePreheat		0x1034
-#define	NozzleTemp			0x1036
-#define	BedPreheat			0x103A
-#define	Bedtemp				0x103C
+#define	NzBdSet				0x1032 // cooldown Hotend and Bed
+#define	NozzlePreheat		0x1034 // setpoint
+#define	NozzleTemp			0x1036 // Actual
+#define	BedPreheat			0x103A // Setpoint
+#define	Bedtemp				0x103C // Actual
+
+#define e2Temp      0x1050
+#define e2Preheat   0x104E
 
 #define	AutoZeroIcon		0x1042
 #define	AutoLevelIcon		0x1045
@@ -162,11 +176,6 @@ namespace ExtUI {
 #define DisplayStandbyEnableIndicator 0x1146
 #define DisplayStandbySeconds 0x1148
 
-//#if ANY(MachineCR10SPro, MachineEnder5Plus, MachineCR10Max) || ENABLED(FORCE10SPRODISPLAY)
-//  #define StatusMessageString 0x3000
-//#else
-//  #define StatusMessageString 0x20E8
-//#endif
 #define StatusMessageString 0x2064
 
 #if defined(TARGET_STM32F4)
@@ -267,6 +276,16 @@ void RTSInit();
 
 }
 #ifndef MAIN_MENU_ITEM_1_GCODE
-  #define MAIN_MENU_ITEM_1_GCODE "G28"
+  #if ENABLED(AUTO_BED_LEVELING_BILINEAR)
+    #define MEASURING_GCODE "M190S55\nG28O\nG34\nG29\nM400\nM104S215\nG28\nM109S215\nM420S1\nG1X100Y100F5000\nG1Z0\nM500\nM117 Set Z Offset"
+  #elif ENABLED(AUTO_BED_LEVELING_UBL)
+    #define MEASURING_GCODE "M190S55\nG28O\nG34\nG29P1\nG29P3\nG29S1\nG29S0\nG29F0.0\nG29A\nM104S215\nG28\nM109S215\nG1X150Y150F5000\nG1Z0\nM500\nM400\nM117 Set Z Offset"
+  #else
+    #define MEASURING_GCODE "G28"
+  #endif
+#else
+  #define MEASURING_GCODE MAIN_MENU_ITEM_1_GCODE
 #endif
+
+
 #endif

@@ -294,6 +294,9 @@ void DGUSDisplay::loop() {
   if (!no_reentrance) {
     no_reentrance = true;
     ProcessRx();
+    //Because crappy VPHELPER macros cant take calcs or functions, process updated value here. If we handle only in button handler code, we will miss changes over M290
+    dgusdisplay.WriteVariable(VP_Z_OFFSET, (int16_t)(100*ExtUI::getZOffset_mm()));
+
     no_reentrance = false;
   }
 }

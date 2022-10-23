@@ -36,7 +36,7 @@
 #include "../../marlinui.h"
 #include "../../../HAL/shared/Delay.h"
 
-#if HAS_BUZZER
+#if HAS_SOUND
   #include "../../../libs/buzzer.h"
 #endif
 
@@ -50,13 +50,7 @@ ENCODER_Rate EncoderRate;
 
 // TODO: Replace with ui.quick_feedback
 void Encoder_tick() {
-  #if PIN_EXISTS(BEEPER)
-    if (ui.buzzer_enabled) {
-      WRITE(BEEPER_PIN, HIGH);
-      delay(10);
-      WRITE(BEEPER_PIN, LOW);
-    }
-  #endif
+  TERN_(HAS_BEEPER, if (ui.sound_on) buzzer.click(10));
 }
 
 // Encoder initialization
@@ -70,7 +64,7 @@ void Encoder_Configuration() {
   #if BUTTON_EXISTS(ENC)
     SET_INPUT_PULLUP(BTN_ENC);
   #endif
-  #if PIN_EXISTS(BEEPER)
+  #if HAS_BEEPER
     SET_OUTPUT(BEEPER_PIN);     // TODO: Use buzzer.h which already inits this
   #endif
 }
@@ -139,8 +133,10 @@ EncoderState Encoder_ReceiveAnalyze() {
           // Note that the rate is always calculated between two passes through the
           // loop and that the abs of the temp_diff value is tracked.
           const float encoderStepRate = encoderMovementSteps / float(ms - EncoderRate.lastEncoderTime) * 1000;
-               if (encoderStepRate >= ENCODER_100X_STEPS_PER_SEC) encoderMultiplier = 100;
-          else if (encoderStepRate >= ENCODER_10X_STEPS_PER_SEC)  encoderMultiplier = 10;
+          #if defined(ENCODER_100X_STEPS_PER_SEC)
+            if (encoderStepRate >= ENCODER_100X_STEPS_PER_SEC) encoderMultiplier = 100;
+          #endif
+          if (encoderStepRate >= ENCODER_10X_STEPS_PER_SEC)  encoderMultiplier = 10;
           #if ENCODER_5X_STEPS_PER_SEC
             else if (encoderStepRate >= ENCODER_5X_STEPS_PER_SEC) encoderMultiplier = 5;
           #endif

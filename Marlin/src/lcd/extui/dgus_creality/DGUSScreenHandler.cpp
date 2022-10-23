@@ -770,7 +770,7 @@ void DGUSScreenHandler::ScreenConfirmedOK(DGUS_VP_Variable &var, void *val_ptr) 
 void DGUSScreenHandler::HandleZoffsetChange(DGUS_VP_Variable &var, void *val_ptr) {
   HandleLiveAdjustZ(var, val_ptr);
 }
-
+#if HAS_MESH
 void DGUSScreenHandler::OnMeshLevelingStart() {
   GotoScreen(DGUSLCD_SCREEN_LEVELING);
   dgusdisplay.WriteVariable(VP_MESH_SCREEN_MESSAGE_ICON, static_cast<uint16_t>(MESH_SCREEN_MESSAGE_ICON_LEVELING));
@@ -847,6 +847,7 @@ void DGUSScreenHandler::InitMeshValues() {
   }
 }
 
+
 void DGUSScreenHandler::ResetMeshValues() {
   for (uint8_t x = 0; x < GRID_MAX_POINTS_X; x++) {
     for (uint8_t y = 0; y < GRID_MAX_POINTS_Y; y++) {
@@ -858,6 +859,7 @@ void DGUSScreenHandler::ResetMeshValues() {
 
   dgusdisplay.WriteVariable(VP_MESH_LEVEL_STATUS, static_cast<uint16_t>(DGUS_GRID_VISUALIZATION_START_ID));
 }
+#endif
 
 uint16_t CreateRgb(double h, double s, double v) {
     struct {
@@ -930,15 +932,15 @@ uint16_t CreateRgb(double h, double s, double v) {
 
 #if HAS_BED_PROBE
   void DGUSScreenHandler::UpdateMeshValue(const int8_t x, const int8_t y, const float z) {
-    SERIAL_ECHOPGM("X", x);
-    SERIAL_ECHOPGM(" Y", y);
-    SERIAL_ECHO(" Z");
-    SERIAL_ECHO_F(z, 4);
+    //SERIAL_ECHOPGM("X", x);
+    //SERIAL_ECHOPGM(" Y", y);
+    //SERIAL_ECHO(" Z");
+    //SERIAL_ECHO_F(z, 4);
 
   // Determine the screen X and Y value
   if (x % SkipMeshPoint != 0 || y % SkipMeshPoint != 0) {
     // Skip this point
-    SERIAL_ECHOLN("");
+    //SERIAL_ECHOLN("");
     return;
   }
 
@@ -959,12 +961,12 @@ uint16_t CreateRgb(double h, double s, double v) {
       // If we don't accidently overshoot to the next number, trick the display by upping the number 0.0001 💩
       displayZ += correctionFactor;
 
-      SERIAL_ECHO(" displayZ: ");
-      SERIAL_ECHO_F(z, 4);
+      //SERIAL_ECHO(" displayZ: ");
+      //SERIAL_ECHO_F(z, 4);
     }
   }
 
-  SERIAL_ECHOLN("");
+  //SERIAL_ECHOLN("");
 
   dgusdisplay.WriteVariable(vpAddr, displayZ);
 
@@ -1734,8 +1736,10 @@ bool DGUSScreenHandler::loop() {
       // Ensure to pick up the settings
       SetTouchScreenConfiguration();
 
-      // Set initial leveling status
-      InitMeshValues();
+      #if HAS_MESH
+        // Set initial leveling status
+        InitMeshValues();
+      #endif
 
       // No disabled back button
       ScreenHandler.SetSynchronousOperationFinish();

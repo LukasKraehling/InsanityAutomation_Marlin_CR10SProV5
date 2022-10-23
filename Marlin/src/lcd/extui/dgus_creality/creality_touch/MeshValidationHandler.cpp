@@ -1,7 +1,7 @@
 
 #include "../../../../inc/MarlinConfigPre.h"
 
-#if ENABLED(DGUS_LCD_UI_CREALITY_TOUCH)
+#if ENABLED(DGUS_LCD_UI_CREALITY_TOUCH) && HAS_MESH
 
 #include "../DGUSDisplayDef.h"
 #include "../DGUSDisplay.h"

@@ -1,5 +1,5 @@
 #include <cstdint>
-
+#if HAS_MESH
 class MeshValidationHandler {
     public:
         static void Init();
@@ -30,3 +30,4 @@ class MeshValidationHandler {
 };
 
 constexpr feedRate_t MESH_VALIDATION_PATTERN_FEEDRATE = G26_XY_FEEDRATE;
+#endif

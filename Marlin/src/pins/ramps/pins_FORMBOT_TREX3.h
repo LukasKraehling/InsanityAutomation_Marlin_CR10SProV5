@@ -29,7 +29,7 @@
 #include "env_validate.h"
 
 #if HOTENDS > 2 || E_STEPPERS > 2
-  #error "Formbot supports up to 2 hotends / E-steppers. Comment out this line to continue."
+  #error "Formbot supports up to 2 hotends / E steppers."
 #endif
 
 #define BOARD_INFO_NAME      "Formbot"
@@ -134,7 +134,6 @@
 #define FAN_PIN                                9
 #define FAN1_PIN                              12
 
-#define NUM_RUNOUT_SENSORS                     2
 #define FIL_RUNOUT_PIN                        22
 #define FIL_RUNOUT2_PIN                       21
 

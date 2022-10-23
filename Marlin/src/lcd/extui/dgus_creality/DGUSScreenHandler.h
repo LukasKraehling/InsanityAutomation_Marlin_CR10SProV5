@@ -34,6 +34,8 @@
   #endif
 #endif
 
+#include "../../../module/motion.h"
+
 enum DGUSLCD_Screens : uint8_t;
 
 struct creality_dwin_settings_t {
@@ -139,9 +141,12 @@ public:
     // Hook for PID autotune
     static void HandlePIDAutotune(DGUS_VP_Variable &var, void *val_ptr);
   #endif
-  #if HAS_BED_PROBE
+
+
+  static void HandleZoffsetChange(DGUS_VP_Variable &var, void *val_ptr);
+
+  #if HAS_MESH
     // Hook for "Change probe offset z"
-    static void HandleZoffsetChange(DGUS_VP_Variable &var, void *val_ptr);
 
     static void OnMeshLevelingStart();
 

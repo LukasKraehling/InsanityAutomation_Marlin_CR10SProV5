@@ -165,11 +165,11 @@ bool hasPrintTimer = false;
     ScreenHandler.OnHomingStart();
   }
 
-  void onHomingComplete() {
+  void onHomingDone() {
     ScreenHandler.OnHomingComplete();
   }
 
-  void onPrintFinished() {
+  void onPrintDone() {
     ScreenHandler.OnPrintFinished();
   }
 
@@ -185,19 +185,21 @@ bool hasPrintTimer = false;
     // Called after loading or resetting stored settings
   }
 
-  void onConfigurationStoreWritten(bool success) {
+  void onSettingsStored(bool success) {
     // Called after the entire EEPROM has been written,
     // whether successful or not.
   }
 
-  void onConfigurationStoreRead(bool success) {
+  void onSettingsLoaded(bool success) {
     // Called after the entire EEPROM has been read,
     // whether successful or not.
   }
 
   #if HAS_MESH
-    void onMeshLevelingStart() {
-      ScreenHandler.OnMeshLevelingStart();
+    void onLevelingStart() {
+      #if HAS_BED_PROBE
+        ScreenHandler.OnMeshLevelingStart();
+      #endif
     }
 
     void onMeshUpdate(const int8_t xpos, const int8_t ypos, const float zval) {
@@ -206,6 +208,9 @@ bool hasPrintTimer = false;
 
     void onMeshUpdate(const int8_t xpos, const int8_t ypos, const ExtUI::probe_state_t state) {
       ScreenHandler.OnMeshLevelingUpdate(xpos, ypos, 0);
+    }
+    void onLevelingDone() {
+
     }
   #endif
 
@@ -247,12 +252,14 @@ bool hasPrintTimer = false;
   void onSteppersEnabled() {
   }
 
-  void onMeshValidationStarting() {
-    MeshValidationHandler::OnMeshValidationStart();
-  }
+  #if HAS_MESH
+    void onMeshValidationStarting() {
+      MeshValidationHandler::OnMeshValidationStart();
+    }
 
-  void onMeshValidationFinished() {
-    MeshValidationHandler::OnMeshValidationFinish();
-  }
+    void onMeshValidationFinished() {
+      MeshValidationHandler::OnMeshValidationFinish();
+    }
+  #endif
 }
 #endif // HAS_DGUS_LCD
