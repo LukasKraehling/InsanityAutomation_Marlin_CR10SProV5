@@ -3722,7 +3722,7 @@
   #if(ANY(MachineEnder2, MachineEnder2Pro))
     #define NOZZLE_PARK_POINT { (0), (0), 10 }
   #else
-    #define NOZZLE_PARK_POINT { (50), (10), 5 }
+    #define NOZZLE_PARK_POINT { (50), (20), 5 }
   #endif
 
   #define NOZZLE_PARK_MOVE          0   // Park motion: 0 = XY Move, 1 = X Only, 2 = Y Only, 3 = X before Y, 4 = Y before X
