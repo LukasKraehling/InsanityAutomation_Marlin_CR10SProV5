@@ -332,7 +332,7 @@
 // @section info
 
 // Author info of this build printed to the host during boot and M115
-#define STRING_CONFIG_H_AUTHOR "TinyMachines3D <- L'Kayne" // Who made the changes.
+#define STRING_CONFIG_H_AUTHOR "TinyMachines3D <- LukasKraehling" // Who made the changes.
 #define CUSTOM_VERSION_FILE Version.h // Path from the root directory (no quotes)
 
 /**
@@ -2202,11 +2202,11 @@
   #define DEFAULT_RETRACT_ACCELERATION  1000    // E acceleration for retracts
   #define DEFAULT_TRAVEL_ACCELERATION   300    // X, Y, Z acceleration for travel (non printing) moves
 #elif (ANY(MachineCR10SPro, MachineCR6, MachineCR6Max, MachineCR30))
-  #define DEFAULT_MAX_FEEDRATE          { 500, 500, 10, 70 }
-  #define DEFAULT_MAX_ACCELERATION      { 850, 850, 100, 60 }
-  #define DEFAULT_ACCELERATION          850    // X, Y, Z and E acceleration for printing moves
+  #define DEFAULT_MAX_FEEDRATE          { 750, 750, 15, 75 }
+  #define DEFAULT_MAX_ACCELERATION      { 1500, 1000, 150, 60 }
+  #define DEFAULT_ACCELERATION          1000    // X, Y, Z and E acceleration for printing moves
   #define DEFAULT_RETRACT_ACCELERATION  1000    // E acceleration for retracts
-  #define DEFAULT_TRAVEL_ACCELERATION   850    // X, Y, Z acceleration for travel (non printing) moves
+  #define DEFAULT_TRAVEL_ACCELERATION   1500    // X, Y, Z acceleration for travel (non printing) moves
 #elif (ENABLED(MachineCR10Std))
   #define DEFAULT_MAX_FEEDRATE          { 500, 500, 10, 75 }
   #define DEFAULT_MAX_ACCELERATION      { 1500, 1500, 100, 75 }
@@ -2282,10 +2282,10 @@
     #define DEFAULT_XJERK 20.0
     #define DEFAULT_YJERK 20.0
   #else
-    #define DEFAULT_XJERK 12.5
-    #define DEFAULT_YJERK 5.0
+    #define DEFAULT_XJERK 20
+    #define DEFAULT_YJERK 10
   #endif
-  #define DEFAULT_ZJERK  0.3
+  #define DEFAULT_ZJERK  0.5
   //#define DEFAULT_IJERK  0.3
   //#define DEFAULT_JJERK  0.3
   //#define DEFAULT_KJERK  0.3

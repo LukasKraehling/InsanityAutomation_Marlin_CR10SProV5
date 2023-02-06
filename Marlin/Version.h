@@ -171,7 +171,7 @@
 #elif(ENABLED(MachineCRX))
   #define CUSTOM_MACHINE_NAME "TM3D CR-X"
 #elif ENABLED(MachineCR10SProV2)
-  #define CUSTOM_MACHINE_NAME "LK10SProV5.2"
+  #define CUSTOM_MACHINE_NAME "LK10SProV8"
 #elif(ENABLED(MachineCR10SPro))
   #define CUSTOM_MACHINE_NAME "TM3D 10S Pro"
 #elif(ENABLED(MachineCR10Max))
