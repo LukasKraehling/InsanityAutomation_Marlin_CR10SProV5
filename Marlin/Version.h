@@ -80,14 +80,14 @@
 #elif(ENABLED(MachineS5) || ENABLED(MachineCR10Max))
   #define VerChar1 "5"
 #elif ENABLED(MachineCR2020)
- #define VerChar1 "20"
+  #define VerChar1 "20"
 #elif(ENABLED(MachineCR30))
- #define VerChar1 "CR30"
+  #define VerChar1 "CR30"
 #endif
 
 #if(ENABLED(HotendStock))
 #define VerChar2 "S"
-#elif (ENABLED(HotendE3D))
+#elif(ENABLED(HotendE3D))
 #define VerChar2 "E"
 #elif ENABLED(HotendMosquito)
 #define VerChar2 "M"
@@ -98,6 +98,7 @@
 #else
 #define VerChar3 "S"
 #endif
+
 
 #if(ENABLED(BedAC))
 #define VerChar4 "A"
@@ -115,9 +116,9 @@
 #define VerChar5 "N"
 #endif
 
-#if (ENABLED(ABL_UBL))
+#if(ENABLED(ABL_UBL))
 #define VerChar6 "U"
-#elif (ENABLED(ABL_BI))
+#elif(ENABLED(ABL_BI))
 #define VerChar6 "B"
 #else
 #define VerChar6 "N"
@@ -171,19 +172,19 @@
   #define CUSTOM_MACHINE_NAME "TM3D CR-X"
 #elif ENABLED(MachineCR10SProV2)
   #define CUSTOM_MACHINE_NAME "LK10SProV5.2"
-#elif (ENABLED(MachineCR10SPro))
+#elif(ENABLED(MachineCR10SPro))
   #define CUSTOM_MACHINE_NAME "TM3D 10S Pro"
-#elif (ENABLED(MachineCR10Max))
+#elif(ENABLED(MachineCR10Max))
   #define CUSTOM_MACHINE_NAME "TM3D Max"
-#elif (ENABLED(MachineCR10SV3))
+#elif(ENABLED(MachineCR10SV3))
   #define CUSTOM_MACHINE_NAME "TM3D CR10V3"
-#elif (ENABLED(MachineCR10SV2))
+#elif(ENABLED(MachineCR10SV2))
   #define CUSTOM_MACHINE_NAME "TM3D CR10V2"
-#elif (ENABLED(MachineCR10Std))
+#elif(ENABLED(MachineCR10Std))
   #define CUSTOM_MACHINE_NAME "300 SuPeR"
-#elif (ENABLED(MachineS4))
+#elif(ENABLED(MachineS4))
   #define CUSTOM_MACHINE_NAME "400 SuPeR"
-#elif (ENABLED(MachineS5))
+#elif(ENABLED(MachineS5))
   #define CUSTOM_MACHINE_NAME "500 SuPeR"
 #elif ENABLED(MachineCR2020)
   #define CUSTOM_MACHINE_NAME "TM3D 2020"
