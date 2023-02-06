@@ -80,12 +80,12 @@
 #elif(ENABLED(MachineS5) || ENABLED(MachineCR10Max))
   #define VerChar1 "5"
 #elif ENABLED(MachineCR2020)
-#define VerChar1 "20"
-#elif (ENABLED(MachineCR30))
-#define VerChar1 "CR30"
+ #define VerChar1 "20"
+#elif(ENABLED(MachineCR30))
+ #define VerChar1 "CR30"
 #endif
 
-#if (ENABLED(HotendStock))
+#if(ENABLED(HotendStock))
 #define VerChar2 "S"
 #elif (ENABLED(HotendE3D))
 #define VerChar2 "E"
@@ -93,23 +93,23 @@
 #define VerChar2 "M"
 #endif
 
-#if (ENABLED(HotendAllMetal))
+#if(ENABLED(HotendAllMetal))
 #define VerChar3 "M"
 #else
 #define VerChar3 "S"
 #endif
 
-#if (ENABLED(BedAC))
+#if(ENABLED(BedAC))
 #define VerChar4 "A"
-#elif (ENABLED(BedDC))
+#elif(ENABLED(BedDC))
 #define VerChar4 "D"
 #else
 #define VerChar4 "N"
 #endif
 
-#if (ENABLED(ABL_EZABL))
+#if(ENABLED(ABL_EZABL))
 #define VerChar5 "A"
-#elif (ENABLED(ABL_BLTOUCH))
+#elif(ENABLED(ABL_BLTOUCH))
 #define VerChar5 "B"
 #else
 #define VerChar5 "N"
@@ -170,29 +170,29 @@
 #elif(ENABLED(MachineCRX))
   #define CUSTOM_MACHINE_NAME "TM3D CR-X"
 #elif ENABLED(MachineCR10SProV2)
-#define CUSTOM_MACHINE_NAME "LK10SProV5.2"
+  #define CUSTOM_MACHINE_NAME "LK10SProV5.2"
 #elif (ENABLED(MachineCR10SPro))
-#define CUSTOM_MACHINE_NAME "TM3D 10S Pro"
+  #define CUSTOM_MACHINE_NAME "TM3D 10S Pro"
 #elif (ENABLED(MachineCR10Max))
-#define CUSTOM_MACHINE_NAME "TM3D Max"
+  #define CUSTOM_MACHINE_NAME "TM3D Max"
 #elif (ENABLED(MachineCR10SV3))
-#define CUSTOM_MACHINE_NAME "TM3D CR10V3"
+  #define CUSTOM_MACHINE_NAME "TM3D CR10V3"
 #elif (ENABLED(MachineCR10SV2))
-#define CUSTOM_MACHINE_NAME "TM3D CR10V2"
+  #define CUSTOM_MACHINE_NAME "TM3D CR10V2"
 #elif (ENABLED(MachineCR10Std))
-#define CUSTOM_MACHINE_NAME "300 SuPeR"
+  #define CUSTOM_MACHINE_NAME "300 SuPeR"
 #elif (ENABLED(MachineS4))
-#define CUSTOM_MACHINE_NAME "400 SuPeR"
+  #define CUSTOM_MACHINE_NAME "400 SuPeR"
 #elif (ENABLED(MachineS5))
-#define CUSTOM_MACHINE_NAME "500 SuPeR"
+  #define CUSTOM_MACHINE_NAME "500 SuPeR"
 #elif ENABLED(MachineCR2020)
-#define CUSTOM_MACHINE_NAME "TM3D 2020"
+  #define CUSTOM_MACHINE_NAME "TM3D 2020"
 #elif ENABLED(MachineSermoonD1)
   #define CUSTOM_MACHINE_NAME "SermoonD1"
 #elif ENABLED(MachineCR5)
   #define CUSTOM_MACHINE_NAME "CR5 Pro"
 #elif ENABLED(MachineCR30)
-#define CUSTOM_MACHINE_NAME "CR30 Printmill"
+  #define CUSTOM_MACHINE_NAME "CR30 Printmill"
 #endif
 
 /**
@@ -212,7 +212,7 @@
  * The WEBSITE_URL is the location where users can get more information such as
  * documentation about a specific Marlin release.
  */
-#define WEBSITE_URL "L'Kayne Industries"
+#define WEBSITE_URL "tinymachines3d.com"
 
 /**
  * Set the vendor info the serial USB interface, if changable
