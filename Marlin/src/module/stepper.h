@@ -154,38 +154,39 @@
 
 // Add time for each stepper
 #if HAS_X_STEP
-  #define ISR_X_STEPPER_CYCLES  ISR_STEPPER_CYCLES
+  #define ISR_X_STEPPER_CYCLES ISR_STEPPER_CYCLES
 #endif
 #if HAS_Y_STEP
-  #define ISR_Y_STEPPER_CYCLES  ISR_STEPPER_CYCLES
+  #define ISR_Y_STEPPER_CYCLES ISR_STEPPER_CYCLES
 #endif
 #if HAS_Z_STEP
-  #define ISR_Z_STEPPER_CYCLES  ISR_STEPPER_CYCLES
+  #define ISR_Z_STEPPER_CYCLES ISR_STEPPER_CYCLES
 #endif
 #if HAS_I_STEP
-  #define ISR_I_STEPPER_CYCLES  ISR_STEPPER_CYCLES
+  #define ISR_I_STEPPER_CYCLES ISR_STEPPER_CYCLES
 #endif
 #if HAS_J_STEP
-  #define ISR_J_STEPPER_CYCLES  ISR_STEPPER_CYCLES
+  #define ISR_J_STEPPER_CYCLES ISR_STEPPER_CYCLES
 #endif
 #if HAS_K_STEP
-  #define ISR_K_STEPPER_CYCLES  ISR_STEPPER_CYCLES
+  #define ISR_K_STEPPER_CYCLES ISR_STEPPER_CYCLES
 #endif
 #if HAS_U_STEP
-  #define ISR_U_STEPPER_CYCLES  ISR_STEPPER_CYCLES
+  #define ISR_U_STEPPER_CYCLES ISR_STEPPER_CYCLES
 #endif
 #if HAS_V_STEP
-  #define ISR_V_STEPPER_CYCLES  ISR_STEPPER_CYCLES
+  #define ISR_V_STEPPER_CYCLES ISR_STEPPER_CYCLES
 #endif
 #if HAS_W_STEP
-  #define ISR_W_STEPPER_CYCLES  ISR_STEPPER_CYCLES
+  #define ISR_W_STEPPER_CYCLES ISR_STEPPER_CYCLES
 #endif
 #if HAS_EXTRUDERS
-  #define ISR_E_STEPPER_CYCLES  ISR_STEPPER_CYCLES    // E is always interpolated, even for mixing extruders
+  #define ISR_E_STEPPER_CYCLES ISR_STEPPER_CYCLES // E is always interpolated, even for mixing extruders
 #endif
 
 // And the total minimum loop time, not including the base
-#define MIN_ISR_LOOP_CYCLES (ISR_MIXING_STEPPER_CYCLES LOGICAL_AXIS_GANG(+ ISR_E_STEPPER_CYCLES, + ISR_X_STEPPER_CYCLES, + ISR_Y_STEPPER_CYCLES, + ISR_Z_STEPPER_CYCLES, + ISR_I_STEPPER_CYCLES, + ISR_J_STEPPER_CYCLES, + ISR_K_STEPPER_CYCLES, + ISR_U_STEPPER_CYCLES, + ISR_V_STEPPER_CYCLES, + ISR_W_STEPPER_CYCLES))
+#define _PLUS_AXIS_CYCLES(A) + (ISR_##A##_STEPPER_CYCLES)
+#define MIN_ISR_LOOP_CYCLES (ISR_MIXING_STEPPER_CYCLES LOGICAL_AXIS_MAP(_PLUS_AXIS_CYCLES))
 
 // Calculate the minimum MPU cycles needed per pulse to enforce, limited to the max stepper rate
 #define _MIN_STEPPER_PULSE_CYCLES(N) _MAX(uint32_t((F_CPU) / (MAXIMUM_STEPPER_RATE)), ((F_CPU) / 500000UL) * (N))
@@ -330,47 +331,38 @@ constexpr ena_mask_t enable_overlap[] = {
 
 #if HAS_SHAPING
 
-  // These constexpr are used to calculate the shaping queue buffer sizes
-  struct DistinctAxes{ float x, y, z, i, j, k, u, v, w, e0, e1, e2, e3, e4, e5, e6, e7; };
-  constexpr DistinctAxes max_feedrate = DEFAULT_MAX_FEEDRATE;
-  constexpr DistinctAxes steps_per_unit = DEFAULT_AXIS_STEPS_PER_UNIT;
-  constexpr float _max_feedrate[] = DEFAULT_MAX_FEEDRATE;
-  constexpr float _steps_per_unit[] = DEFAULT_AXIS_STEPS_PER_UNIT;
-
   #ifdef SHAPING_MAX_STEPRATE
     constexpr float max_step_rate = SHAPING_MAX_STEPRATE;
-  // MIN_STEP_ISR_FREQUENCY is known at compile time on AVRs and any reduction in SRAM is welcome
-  #elif defined(__AVR__) || !defined(ADAPTIVE_STEP_SMOOTHING)
-    template<int INDEX = DISTINCT_AXES> constexpr float max_isr_rate() {
-      return _MAX(_max_feedrate[INDEX - 1] * _steps_per_unit[INDEX - 1], max_isr_rate<INDEX - 1>());
-    }
-    template<> constexpr float max_isr_rate<0>() {
-      return TERN0(ADAPTIVE_STEP_SMOOTHING, MIN_STEP_ISR_FREQUENCY);
-    }
-    constexpr float max_step_rate = _MIN(max_isr_rate(),
-                                      TERN0(INPUT_SHAPING_X, max_feedrate.x * steps_per_unit.x) +
-                                      TERN0(INPUT_SHAPING_Y, max_feedrate.y * steps_per_unit.y)
-                                    );
   #else
-    constexpr float max_step_rate = TERN0(INPUT_SHAPING_X, max_feedrate.x * steps_per_unit.x) +
-                                    TERN0(INPUT_SHAPING_Y, max_feedrate.y * steps_per_unit.y);
+    constexpr float     _ISDASU[] = DEFAULT_AXIS_STEPS_PER_UNIT;
+    constexpr feedRate_t _ISDMF[] = DEFAULT_MAX_FEEDRATE;
+    constexpr float max_shaped_rate = TERN0(INPUT_SHAPING_X, _ISDMF[X_AXIS] * _ISDASU[X_AXIS]) +
+                                      TERN0(INPUT_SHAPING_Y, _ISDMF[Y_AXIS] * _ISDASU[Y_AXIS]);
+    #if defined(__AVR__) || !defined(ADAPTIVE_STEP_SMOOTHING)
+      // MIN_STEP_ISR_FREQUENCY is known at compile time on AVRs and any reduction in SRAM is welcome
+      template<int INDEX=DISTINCT_AXES> constexpr float max_isr_rate() {
+        return _MAX(_ISDMF[INDEX - 1] * _ISDASU[INDEX - 1], max_isr_rate<INDEX - 1>());
+      }
+      template<> constexpr float max_isr_rate<0>() {
+        return TERN0(ADAPTIVE_STEP_SMOOTHING, MIN_STEP_ISR_FREQUENCY);
+      }
+      constexpr float max_step_rate = _MIN(max_isr_rate(), max_shaped_rate);
+    #else
+      constexpr float max_step_rate = max_shaped_rate;
+    #endif
   #endif
-  #ifdef SHAPING_MIN_FREQ
-    constexpr uint16_t shaping_min_freq = SHAPING_MIN_FREQ;
-  #else
-    constexpr uint16_t shaping_min_freq = _MIN(0x7FFFFFFFL OPTARG(INPUT_SHAPING_X, SHAPING_FREQ_X) OPTARG(INPUT_SHAPING_Y, SHAPING_FREQ_Y));
+
+  #ifndef SHAPING_MIN_FREQ
+    #define SHAPING_MIN_FREQ _MIN(0x7FFFFFFFL OPTARG(INPUT_SHAPING_X, SHAPING_FREQ_X) OPTARG(INPUT_SHAPING_Y, SHAPING_FREQ_Y))
   #endif
-  constexpr uint16_t shaping_echoes = max_step_rate / shaping_min_freq / 2 + 3;
+  constexpr uint16_t shaping_min_freq = SHAPING_MIN_FREQ,
+                     shaping_echoes = max_step_rate / shaping_min_freq / 2 + 3;
 
   typedef IF<ENABLED(__AVR__), uint16_t, uint32_t>::type shaping_time_t;
   enum shaping_echo_t { ECHO_NONE = 0, ECHO_FWD = 1, ECHO_BWD = 2 };
   struct shaping_echo_axis_t {
-    #if ENABLED(INPUT_SHAPING_X)
-      shaping_echo_t x:2;
-    #endif
-    #if ENABLED(INPUT_SHAPING_Y)
-      shaping_echo_t y:2;
-    #endif
+    TERN_(INPUT_SHAPING_X, shaping_echo_t x:2);
+    TERN_(INPUT_SHAPING_Y, shaping_echo_t y:2);
   };
 
   class ShapingQueue {
@@ -811,9 +803,9 @@ class Stepper {
     }
 
     #if HAS_SHAPING
-      static void set_shaping_damping_ratio(const AxisEnum axis, const float zeta);
+      static void set_shaping_damping_ratio(const AxisEnum axis, const_float_t zeta);
       static float get_shaping_damping_ratio(const AxisEnum axis);
-      static void set_shaping_frequency(const AxisEnum axis, const float freq);
+      static void set_shaping_frequency(const AxisEnum axis, const_float_t freq);
       static float get_shaping_frequency(const AxisEnum axis);
     #endif
 

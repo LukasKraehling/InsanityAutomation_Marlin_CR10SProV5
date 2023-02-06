@@ -394,25 +394,25 @@ void onIdle()
     rtscheck.RTS_SndData((unsigned int)(getAxisSteps_per_mm(Z) * 10), StepMM_Z);
     rtscheck.RTS_SndData((unsigned int)(getAxisSteps_per_mm(E0) * 10), StepMM_E);
 
-    rtscheck.RTS_SndData(((unsigned int)getAxisMaxAcceleration_mm_s2(X)/100), Accel_X);
-    rtscheck.RTS_SndData(((unsigned int)getAxisMaxAcceleration_mm_s2(Y)/100), Accel_Y);
-    rtscheck.RTS_SndData(((unsigned int)getAxisMaxAcceleration_mm_s2(Z)/10), Accel_Z);
-    rtscheck.RTS_SndData(((unsigned int)getAxisMaxAcceleration_mm_s2(E0)), Accel_E);
+    rtscheck.RTS_SndData((unsigned int)(getAxisMaxAcceleration_mm_s2(X)/100), Accel_X);
+    rtscheck.RTS_SndData((unsigned int)(getAxisMaxAcceleration_mm_s2(Y)/100), Accel_Y);
+    rtscheck.RTS_SndData((unsigned int)(getAxisMaxAcceleration_mm_s2(Z)/10), Accel_Z);
+    rtscheck.RTS_SndData((unsigned int)(getAxisMaxAcceleration_mm_s2(E0)), Accel_E);
 
-    rtscheck.RTS_SndData(((unsigned int)getAxisMaxFeedrate_mm_s(X)), Feed_X);
-    rtscheck.RTS_SndData(((unsigned int)getAxisMaxFeedrate_mm_s(Y)), Feed_Y);
-    rtscheck.RTS_SndData(((unsigned int)getAxisMaxFeedrate_mm_s(Z)), Feed_Z);
-    rtscheck.RTS_SndData(((unsigned int)getAxisMaxFeedrate_mm_s(E0)), Feed_E);
+    rtscheck.RTS_SndData((unsigned int)(getAxisMaxFeedrate_mm_s(X)), Feed_X);
+    rtscheck.RTS_SndData((unsigned int)(getAxisMaxFeedrate_mm_s(Y)), Feed_Y);
+    rtscheck.RTS_SndData((unsigned int)(getAxisMaxFeedrate_mm_s(Z)), Feed_Z);
+    rtscheck.RTS_SndData((unsigned int)(getAxisMaxFeedrate_mm_s(E0)), Feed_E);
 
-    rtscheck.RTS_SndData(((unsigned int)getAxisMaxJerk_mm_s(X)*100), Jerk_X);
-    rtscheck.RTS_SndData(((unsigned int)getAxisMaxJerk_mm_s(Y)*100), Jerk_Y);
-    rtscheck.RTS_SndData(((unsigned int)getAxisMaxJerk_mm_s(Z)*100), Jerk_Z);
-    rtscheck.RTS_SndData(((unsigned int)getAxisMaxJerk_mm_s(E0)*100), Jerk_E);
+    rtscheck.RTS_SndData((unsigned int)(getAxisMaxJerk_mm_s(X)*100), Jerk_X);
+    rtscheck.RTS_SndData((unsigned int)(getAxisMaxJerk_mm_s(Y)*100), Jerk_Y);
+    rtscheck.RTS_SndData((unsigned int)(getAxisMaxJerk_mm_s(Z)*100), Jerk_Z);
+    rtscheck.RTS_SndData((unsigned int)(getAxisMaxJerk_mm_s(E0)*100), Jerk_E);
 
     #if HAS_HOTEND_OFFSET
-      rtscheck.RTS_SndData(((unsigned int)getNozzleOffset_mm(X, E1)*10), T2Offset_X);
-      rtscheck.RTS_SndData(((unsigned int)getNozzleOffset_mm(Y, E1)*10), T2Offset_Y);
-      rtscheck.RTS_SndData(((unsigned int)getNozzleOffset_mm(Z, E1)*10), T2Offset_Z);
+      rtscheck.WriteVariable(T2Offset_X, (uint32_t)(getNozzleOffset_mm(X, E1)*1000));
+      rtscheck.WriteVariable(T2Offset_Y, (uint32_t)(getNozzleOffset_mm(Y, E1)*1000));
+      rtscheck.WriteVariable(T2Offset_Z, (uint32_t)(getNozzleOffset_mm(Z, E1)*1000));
       rtscheck.RTS_SndData((unsigned int)(getAxisSteps_per_mm(E1) * 10), T2StepMM_E);
     #endif
 
@@ -769,6 +769,37 @@ void RTSSHOW::RTS_SndData(unsigned long n, unsigned long addr, unsigned char cmd
 	RTS_SndData();
 }
 
+void RTSSHOW::WriteVariable(uint16_t adr, long value) {
+  union { long l; char lb[4]; } endian;
+  char tmp[4];
+  endian.l = value;
+  tmp[0] = endian.lb[3];
+  tmp[1] = endian.lb[2];
+  tmp[2] = endian.lb[1];
+  tmp[3] = endian.lb[0];
+  WriteVariable(adr, static_cast<const void*>(&tmp), sizeof(long));
+}
+
+void RTSSHOW::WriteVariable(uint16_t adr, const void* values, uint8_t valueslen, bool isstr=false, char fillChar = ' ') {
+  const char* myvalues = static_cast<const char*>(values);
+  bool strend = !myvalues;
+  DWIN_SERIAL.write(FHONE);
+  DWIN_SERIAL.write(FHTWO);
+  DWIN_SERIAL.write(valueslen + 3);
+  DWIN_SERIAL.write(0x82);
+  DWIN_SERIAL.write(adr >> 8);
+  DWIN_SERIAL.write(adr & 0xFF);
+  while (valueslen--) {
+    char x;
+    if (!strend) x = *myvalues++;
+    if ((isstr && !x) || strend) {
+      strend = true;
+      x = fillChar;
+    }
+    DWIN_SERIAL.write(x);
+  }
+}
+
 void RTSSHOW::RTS_HandleData()
 {
 	int Checkkey = -1;
@@ -822,9 +853,6 @@ void RTSSHOW::RTS_HandleData()
     case BedPID_P :
     case BedPID_I :
     case BedPID_D :
-    case T2Offset_X:
-    case T2Offset_Y:
-    case T2Offset_Z:
     case T2StepMM_E:
     case Accel_X:
     case Accel_Y:
@@ -849,16 +877,17 @@ void RTSSHOW::RTS_HandleData()
 
   if(recdat.addr == VolumeDisplay)
     Checkkey = VolumeDisplay;
-  if(recdat.addr == DisplayBrightness)
+  else if(recdat.addr == T2Offset_X || recdat.addr == T2Offset_Y || recdat.addr == T2Offset_Z)
+    Checkkey = IdexSettings;
+  else if(recdat.addr == DisplayBrightness)
     Checkkey = DisplayBrightness;
-  if(recdat.addr == DisplayStandbyBrightness)
+  else if(recdat.addr == DisplayStandbyBrightness)
     Checkkey = DisplayStandbyBrightness;
-  if(recdat.addr == DisplayStandbySeconds)
+  else if(recdat.addr == DisplayStandbySeconds)
     Checkkey = DisplayStandbySeconds;
-  if(recdat.addr >= AutolevelVal && recdat.addr <=  4400)  // ((int)AutolevelVal+(GRID_MAX_POINTS_X*GRID_MAX_POINTS_Y*2)) = 4400 with 5x5 mesh
+  else if(recdat.addr >= AutolevelVal && recdat.addr <=  4400)  // ((int)AutolevelVal+(GRID_MAX_POINTS_X*GRID_MAX_POINTS_Y*2)) = 4400 with 5x5 mesh
     Checkkey = AutolevelVal;
-
-	if (recdat.addr >= SDFILE_ADDR && recdat.addr <= (SDFILE_ADDR + 10 * (FileNum + 1)))
+	else if (recdat.addr >= SDFILE_ADDR && recdat.addr <= (SDFILE_ADDR + 10 * (FileNum + 1)))
 		Checkkey = Filename;
 
   SERIAL_ECHOLNPGM_P(PSTR("== Checkkey=="));
@@ -871,8 +900,6 @@ void RTSSHOW::RTS_HandleData()
 		recdat.head[1] = FHTWO;
 		return;
   }
-
-
 
   constexpr float lfrb[4] = BED_TRAMMING_INSET_LFRB;
   SERIAL_ECHOLNPGM_P(PSTR("BeginSwitch"));
@@ -956,6 +983,35 @@ void RTSSHOW::RTS_HandleData()
       }
 
       break;
+    #if ENABLED(DUAL_X_CARRIAGE)
+      case IdexSettings:
+        if (recdat.addr == T2Offset_X)
+        {
+          SERIAL_ECHOLNPGM("T2Offset_X Set 0 : ", recdat.data[0]);
+          SERIAL_ECHOLNPGM("T2Offset_X Set 1 : ", recdat.data[1]);
+
+          union { long l; short lb[2]; } tmpLongBuff;
+          tmpLongBuff.lb[0] = recdat.data[1];
+          tmpLongBuff.lb[1] = recdat.data[0];
+          SERIAL_ECHOLNPGM("T2Offset_X L : ", tmpLongBuff.l);
+          setNozzleOffset_mm(tmpLongBuff.l/1000, X, E1);
+        }
+        else if (recdat.addr == T2Offset_Y)
+        {
+          union { long l; short lb[2]; } tmpLongBuff;
+          tmpLongBuff.lb[0] = recdat.data[1];
+          tmpLongBuff.lb[1] = recdat.data[0];
+          setNozzleOffset_mm(tmpLongBuff.l/1000, Y, E1);
+        }
+        else if (recdat.addr == T2Offset_Z)
+        {
+          union { long l; short lb[2]; } tmpLongBuff;
+          tmpLongBuff.lb[0] = recdat.data[1];
+          tmpLongBuff.lb[1] = recdat.data[0];
+          setNozzleOffset_mm(tmpLongBuff.l/1000, Z, E1);
+        }
+      break;
+    #endif
 
     case Feedrate:
       setFeedrate_percent(recdat.data[0]);
@@ -1180,9 +1236,6 @@ void RTSSHOW::RTS_HandleData()
         else if (recdat.addr == FanKeyIcon) {
           setTargetFan_percent((uint16_t)recdat.data[0], (fan_t)getActiveTool());
         }
-
-
-
       else {
         float tmp_float_handling;
         if (recdat.data[0] >= 32768)
@@ -1212,18 +1265,6 @@ void RTSSHOW::RTS_HandleData()
           else if (recdat.addr == T2StepMM_E)
           {
             setAxisSteps_per_mm(tmp_float_handling*10, E1);
-          }
-          else if (recdat.addr == T2Offset_X)
-          {
-            setNozzleOffset_mm(tmp_float_handling*10, X, E1);
-          }
-          else if (recdat.addr == T2Offset_Y)
-          {
-            setNozzleOffset_mm(tmp_float_handling*10, Y, E1);
-          }
-          else if (recdat.addr == T2Offset_Z)
-          {
-            setNozzleOffset_mm(tmp_float_handling*10, Z, E1);
           }
         #endif
         #if HAS_BED_PROBE
@@ -2123,32 +2164,13 @@ void RTSSHOW::RTS_HandleData()
 	recdat.head[1] = FHTWO;
 }
 
- void WriteVariable(uint16_t adr, const void* values, uint8_t valueslen, bool isstr=false, char fillChar = ' ') {
-  const char* myvalues = static_cast<const char*>(values);
-  bool strend = !myvalues;
-  DWIN_SERIAL.write(FHONE);
-  DWIN_SERIAL.write(FHTWO);
-  DWIN_SERIAL.write(valueslen + 3);
-  DWIN_SERIAL.write(0x82);
-  DWIN_SERIAL.write(adr >> 8);
-  DWIN_SERIAL.write(adr & 0xFF);
-  while (valueslen--) {
-    char x;
-    if (!strend) x = *myvalues++;
-    if ((isstr && !x) || strend) {
-      strend = true;
-      x = fillChar;
-    }
-    DWIN_SERIAL.write(x);
-  }
-}
 
 void SetTouchScreenConfiguration() {
   // Main configuration (System_Config)
   LIMIT(Settings.screen_brightness, 10, 100); // Prevent a possible all-dark screen
   LIMIT(Settings.standby_time_seconds, 10, 655); // Prevent a possible all-dark screen for standby, yet also don't go higher than the DWIN limitation
 
-
+#define LOWRES_DWIN
   unsigned char cfg_bits = 0x0;
   //#if ENABLED(DWINOS_4)
     cfg_bits |= 1UL << 7; // 7: Enable Control
@@ -2169,7 +2191,7 @@ void SetTouchScreenConfiguration() {
   #else
     const unsigned char config_set[] = { 0x5A, 0x00, 0xFF, cfg_bits };
   #endif
-  WriteVariable(0x80 /*System_Config*/, config_set, sizeof(config_set));
+  rtscheck.WriteVariable(0x80 /*System_Config*/, config_set, sizeof(config_set));
 
   // Standby brightness (LED_Config)
   uint16_t dwinStandbyTimeSeconds = 100 * Settings.standby_time_seconds;  /* milliseconds, but divided by 10 (not 5 like the docs say) */
@@ -2179,7 +2201,7 @@ void SetTouchScreenConfiguration() {
     static_cast<uint8_t>(dwinStandbyTimeSeconds >> 8),
     static_cast<uint8_t>(dwinStandbyTimeSeconds)
   };
-  WriteVariable(0x82 /*LED_Config*/, brightness_set, sizeof(brightness_set));
+  rtscheck.WriteVariable(0x82 /*LED_Config*/, brightness_set, sizeof(brightness_set));
 
   if (!Settings.display_sound)
   {

@@ -93,9 +93,10 @@ namespace ExtUI {
 #define ProbeOffset_Z  0x1026
 
 #define T2Offset_X    0x1090
-#define T2Offset_Y    0x1092
-#define T2Offset_Z    0x1094
-#define T2StepMM_E    0x1096
+#define T2Offset_Y    0x1094
+#define T2Offset_Z    0x1098
+#define T2StepMM_E    0x109C
+#define IdexSettings  0x9999
 
 #define ActiveToolVP  0x1014
 
@@ -240,6 +241,8 @@ class RTSSHOW {
     void RTS_SndData(unsigned int,unsigned long, unsigned char = VarAddr_W);
     void RTS_SndData(long,unsigned long, unsigned char = VarAddr_W);
     void RTS_SndData(unsigned long,unsigned long, unsigned char = VarAddr_W);
+    void WriteVariable(uint16_t adr, const void* values, uint8_t valueslen, bool isstr=false, char fillChar = ' ');
+    void WriteVariable(uint16_t adr, long);
     void RTS_SDcard_Stop();
     void RTS_HandleData();
     void RTS_Init();
