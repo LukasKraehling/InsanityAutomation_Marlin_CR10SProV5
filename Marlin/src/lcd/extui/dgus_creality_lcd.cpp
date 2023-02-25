@@ -226,8 +226,8 @@ bool hasPrintTimer = false;
     void onPidTuning(const result_t rst) {
       // Called for temperature PID tuning result
       switch (rst) {
-        case PID_BAD_EXTRUDER_NUM:
-          PIDHandler::result_message = GET_TEXT(MSG_PID_BAD_EXTRUDER_NUM);
+        case PID_BAD_HEATER_ID:
+          PIDHandler::result_message = GET_TEXT(MSG_PID_BAD_HEATER_ID);
           ScreenHandler.setstatusmessagePGM(PIDHandler::result_message);
           break;
         case PID_TEMP_TOO_HIGH:
@@ -237,11 +237,13 @@ bool hasPrintTimer = false;
         case PID_TUNING_TIMEOUT:
           PIDHandler::result_message = GET_TEXT(MSG_PID_TIMEOUT);
           ScreenHandler.setstatusmessagePGM(PIDHandler::result_message);
-        break;
+          break;
         case PID_DONE:
           PIDHandler::result_message = GET_TEXT(MSG_PID_AUTOTUNE_DONE);
           ScreenHandler.setstatusmessagePGM(PIDHandler::result_message);
-        break;
+          break;
+		default:
+		  break;
       }
     }
   #endif

@@ -67,14 +67,24 @@ support@tinymachines3d.com about purchasing support hours. Aside from this, we a
 
 We have now created a dedicated Discord server to handle support and archive relevant guides and instructions. Patreon supporters will get priority assistance.
 
+## We will NOT handle any support requests for any built compiled from upstream code. The display library from here was taken and submitted upstream without consultation or properly tagging authorship of changes. It was kept off the upstream repo as it was explicitly designed as a drop in library before the Extensible UI API methodology was butchered by hybrid applications with direct includes being repeatedly duplicated. We will not now or ever spend the time to chase bugs caused by changes to the API data types made without concern for backwards compatability.
+
+Extensible UI was designed to allow UI code to live standalone long term. If the API was managed and either versioned or functions overloaded, not changed, UI's no longer being actively maintained would not require maintenance by the Marlin team. The intention was any UI set would drop into the Lib folder and just work. This UI has been maintained under that mindset despite the upstream implementations being full of macros requiring direct pointer access to processed variables, making them fundamentally incompatible with the API, however still relying on its event trigger mechanism.
+
+As another reason this was not placed upstream was to eliminate the nead to develop around merge conflicts following previous code theft issues which have cuased most development to now proceed in the dark, the merge upstream was caught by exactly that, merge issues while adding IDEX functionality.
+
+Due to the blatent disregard to intentions and correct attribution, all support Marlin links have been removed from this repo and open PRs closed, and as long as the situation remains, no further work will be submitted upstream.
+
+Shout out to Tom Brazier, as nearly all notable improvements to the Marlin core code since the last release have come from him.
+
 Insanity Automation Discord - https://discord.gg/TKmJ85PyG4
-Marlin Firmware Discord - https://discord.gg/n5NJ59y
 
 ## Primary Notes for DW7.4.7
    - Added IDEX screens
    - Fan adjustment now numeric instead of simple on/off
    - Tap Z offset on adjustment screen to type numeric value
    - Sync to 2.1.2 with LA now on for all builds, Silent specific builds eliminated
+   - TODO note prior to building release batches - Primary outstanding bug is upstream issue causing M600 to fail to resume, verified on both DWIN and Standard full graphics displays.
 
 ## Primary Notes for DW7.4.6
   - Added Support for the Ender 2 Pro

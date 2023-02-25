@@ -930,7 +930,7 @@ uint16_t CreateRgb(double h, double s, double v) {
   return (((static_cast<uint8_t>(out.r * 255) & 0xf8)<<8) + ((static_cast<uint8_t>(out.g * 255) & 0xfc)<<3) + (static_cast<uint8_t>(out.b * 255)>>3));
 }
 
-#if HAS_BED_PROBE
+#if HAS_LEVELING
   void DGUSScreenHandler::UpdateMeshValue(const int8_t x, const int8_t y, const float z) {
     //SERIAL_ECHOPGM("X", x);
     //SERIAL_ECHOPGM(" Y", y);
