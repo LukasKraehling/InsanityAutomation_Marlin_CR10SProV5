@@ -1,4 +1,14 @@
-﻿## Creality Touch/TFT Screen supported firmware
+﻿# Upgrades to my Creality CR10S-PRO V2
+ - HeroMe Gen7 Hotend-Adapter with one SUNON 1550 Part-Cooling Fan
+ - E3D Revo CR Hotend with ObXidian Nozzle
+ - BondTech LGX Extruder
+ - Exoslide Movement System
+ - HIWIN Linear Rails on Y-Axis
+ - Creality PEI-Sheet Build-Plate
+ - Silicone Build-Plate mounts
+ - Noctua Fans in Base and as hotend radiator cooling
+ 
+ ## Creality Touch/TFT Screen supported firmware
 
 This branch adds support for the Creality touchscreen machines and was split off from the standard Creality branches due to specific custom changes not found upstream. This includes extensions to the EXTui framework among other smaller tweaks that we have been working towards getting submitted upstream. Machines supported here are :
 
