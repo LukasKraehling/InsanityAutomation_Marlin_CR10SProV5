@@ -2724,14 +2724,14 @@
 #if ENABLED(MachineEnder5)
   #define Z_CLEARANCE_DEPLOY_PROBE   0 // Z Clearance for Deploy/Stow
 #else
-  #define Z_CLEARANCE_DEPLOY_PROBE   5 // Z Clearance for Deploy/Stow
+  #define Z_CLEARANCE_DEPLOY_PROBE   15 // Z Clearance for Deploy/Stow
 #endif
 #if ANY(MachineCR6, MachineCR6Max, MachineCR10Smart)
   #define Z_CLEARANCE_BETWEEN_PROBES  3 // Z Clearance between probe points
   #define Z_CLEARANCE_MULTI_PROBE     3 // Z Clearance between multiple probes
 #else
-  #define Z_CLEARANCE_BETWEEN_PROBES  2 // Z Clearance between probe points
-  #define Z_CLEARANCE_MULTI_PROBE     2 // Z Clearance between multiple probes
+  #define Z_CLEARANCE_BETWEEN_PROBES  15 // Z Clearance between probe points
+  #define Z_CLEARANCE_MULTI_PROBE     15 // Z Clearance between multiple probes
 #endif
 #if DISABLED(TOUCH_MI_PROBE)
   #define Z_AFTER_PROBING           5 // Z position after probing is done
