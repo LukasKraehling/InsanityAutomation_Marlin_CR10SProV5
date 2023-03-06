@@ -7,6 +7,7 @@
  - Creality PEI-Sheet Build-Plate
  - Silicone Build-Plate mounts
  - Noctua Fans in Base and as hotend radiator cooling
+ - Creality Enclosure with AlveoONE-R Filter
  
  ## Creality Touch/TFT Screen supported firmware
 
