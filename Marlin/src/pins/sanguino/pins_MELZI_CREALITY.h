@@ -86,7 +86,7 @@
 
 #if ENABLED(MINIPANEL)
   #undef DOGLCD_CS
-  #define DOGLCD_CS                  LCD_PINS_RS
+  #define DOGLCD_CS                  28
 #endif
 
 /**

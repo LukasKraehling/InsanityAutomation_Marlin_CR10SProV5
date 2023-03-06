@@ -707,8 +707,6 @@
   #define LCD_SERIAL_PORT 2
   #define LCD_BAUDRATE 115200
   #define SERIAL_CATCHALL 1
-#elif ANY(Creality422, Creality427, MachineEnder2Pro) && NONE(MachineEnder3V2, MachineEnder3S1, FORCE10SPRODISPLAY, MachineEnder3Touchscreen)
-  #define SERIAL_PORT_2 3
 #endif
 
 /**

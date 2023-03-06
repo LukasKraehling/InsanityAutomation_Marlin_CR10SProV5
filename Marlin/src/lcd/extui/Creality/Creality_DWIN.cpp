@@ -586,10 +586,10 @@ int RTSSHOW::RTS_RecData()
           recdat.addr = vp;
           recdat.len = tmp[2];
           for(unsigned int i = 0;i < dlen; i+=2)
-        {
-          recdat.data[i/2]= tmp[3+i];
-          recdat.data[i/2]= (recdat.data[i/2] << 8 )| tmp[4+i];
-        }
+          {
+            recdat.data[i/2]= tmp[3+i];
+            recdat.data[i/2]= (recdat.data[i/2] << 8 )| tmp[4+i];
+          }
 
           SERIAL_ECHOLNPGM("VP received: ", vp , " - len ", tmp[2]);
 
@@ -604,6 +604,7 @@ int RTSSHOW::RTS_RecData()
 
       // discard anything else
       rx_datagram_state = DGUS_IDLE;
+      return -1;
     }
   }
   return -1;
@@ -807,7 +808,7 @@ void RTSSHOW::RTS_HandleData()
 	SERIAL_ECHOLNPGM_P(PSTR("  *******RTS_HandleData******** "));
 	if (waitway > 0) //for waiting
 	{
-		SERIAL_ECHOLNPGM("waitway ==", (int)waitway);
+		SERIAL_ECHOLNPGM("handle waitway ==", (int)waitway);
 		memset(&recdat, 0, sizeof(recdat));
 		recdat.head[0] = FHONE;
 		recdat.head[1] = FHTWO;
