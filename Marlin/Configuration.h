@@ -2703,7 +2703,7 @@
  * A total of 3 or more adds more slow probes, taking the average.
  */
 #if DISABLED(MachineCR10Orig) || ENABLED(MelziHostOnly)
-  #define MULTIPLE_PROBING 1
+  #define MULTIPLE_PROBING 0
 #endif
 //#define EXTRA_PROBING    1
 
