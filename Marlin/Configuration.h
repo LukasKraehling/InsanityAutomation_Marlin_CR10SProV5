@@ -2200,7 +2200,7 @@
   #define DEFAULT_RETRACT_ACCELERATION  1000    // E acceleration for retracts
   #define DEFAULT_TRAVEL_ACCELERATION   300    // X, Y, Z acceleration for travel (non printing) moves
 #elif (ANY(MachineCR10SPro, MachineCR6, MachineCR6Max, MachineCR30))
-  #define DEFAULT_MAX_FEEDRATE          { 750, 750, 15, 75 }
+  #define DEFAULT_MAX_FEEDRATE          { 750, 750, 20, 100 }
   #define DEFAULT_MAX_ACCELERATION      { 1500, 1000, 150, 60 }
   #define DEFAULT_ACCELERATION          1000    // X, Y, Z and E acceleration for printing moves
   #define DEFAULT_RETRACT_ACCELERATION  1000    // E acceleration for retracts
@@ -2283,7 +2283,7 @@
     #define DEFAULT_XJERK 20
     #define DEFAULT_YJERK 10
   #endif
-  #define DEFAULT_ZJERK  0.5
+  #define DEFAULT_ZJERK  0.3
   //#define DEFAULT_IJERK  0.3
   //#define DEFAULT_JJERK  0.3
   //#define DEFAULT_KJERK  0.3
@@ -2645,10 +2645,10 @@
 #endif
 
 // X and Y axis travel speed (mm/min) between probes
-#define XY_PROBE_FEEDRATE (200*60)
+#define XY_PROBE_FEEDRATE (300*60)
 
 // Feedrate (mm/min) for the first approach when double-probing (MULTIPLE_PROBING == 2)
-#define Z_PROBE_FEEDRATE_FAST (12*60)
+#define Z_PROBE_FEEDRATE_FAST (15*60)
 
 // Feedrate (mm/min) for the "accurate" probe of each point
 #define Z_PROBE_FEEDRATE_SLOW (Z_PROBE_FEEDRATE_FAST / 2)
@@ -2703,7 +2703,7 @@
  * A total of 3 or more adds more slow probes, taking the average.
  */
 #if DISABLED(MachineCR10Orig) || ENABLED(MelziHostOnly)
-  #define MULTIPLE_PROBING 2
+  #define MULTIPLE_PROBING 1
 #endif
 //#define EXTRA_PROBING    1
 
@@ -2724,14 +2724,14 @@
 #if ENABLED(MachineEnder5)
   #define Z_CLEARANCE_DEPLOY_PROBE   0 // Z Clearance for Deploy/Stow
 #else
-  #define Z_CLEARANCE_DEPLOY_PROBE   15 // Z Clearance for Deploy/Stow
+  #define Z_CLEARANCE_DEPLOY_PROBE   5 // Z Clearance for Deploy/Stow
 #endif
 #if ANY(MachineCR6, MachineCR6Max, MachineCR10Smart)
   #define Z_CLEARANCE_BETWEEN_PROBES  3 // Z Clearance between probe points
   #define Z_CLEARANCE_MULTI_PROBE     3 // Z Clearance between multiple probes
 #else
-  #define Z_CLEARANCE_BETWEEN_PROBES  15 // Z Clearance between probe points
-  #define Z_CLEARANCE_MULTI_PROBE     15 // Z Clearance between multiple probes
+  #define Z_CLEARANCE_BETWEEN_PROBES  5 // Z Clearance between probe points
+  #define Z_CLEARANCE_MULTI_PROBE     5 // Z Clearance between multiple probes
 #endif
 #if DISABLED(TOUCH_MI_PROBE)
   #define Z_AFTER_PROBING           5 // Z position after probing is done
@@ -3631,7 +3631,7 @@
 #endif
 
 // Homing speeds (linear=mm/min, rotational=°/min)
-#define HOMING_FEEDRATE_MM_M { (50*60), (50*60), (10*60) }
+#define HOMING_FEEDRATE_MM_M { (80*60), (80*60), (15*60) }
 
 // Validate that endstops are triggered on homing moves
 #define VALIDATE_HOMING_ENDSTOPS
