@@ -3461,7 +3461,7 @@
   #elif ENABLED(ABL_UBL)
     #define GRID_MAX_POINTS_X 6
   #else
-    #define GRID_MAX_POINTS_X 4
+    #define GRID_MAX_POINTS_X 5
   #endif
 #elif ENABLED( MeshFine)
   #define GRID_MAX_POINTS_X 8
