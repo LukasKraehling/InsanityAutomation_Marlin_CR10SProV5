@@ -2648,7 +2648,7 @@
 #define XY_PROBE_FEEDRATE (250*60)
 
 // Feedrate (mm/min) for the first approach when double-probing (MULTIPLE_PROBING == 2)
-#define Z_PROBE_FEEDRATE_FAST (15*60)
+#define Z_PROBE_FEEDRATE_FAST (20*60)
 
 // Feedrate (mm/min) for the "accurate" probe of each point
 #define Z_PROBE_FEEDRATE_SLOW (Z_PROBE_FEEDRATE_FAST / 2)
@@ -3449,7 +3449,6 @@
     #define G26_XY_FEEDRATE_TRAVEL 100    // (mm/s) Feedrate for G26 XY travel moves.
     #define G26_RETRACT_MULTIPLIER   1.0  // G26 Q (retraction) used by default between mesh test elements.
   #endif
-
 #endif
 
 #if ENABLED(MeshFast)
@@ -3462,7 +3461,7 @@
   #elif ENABLED(ABL_UBL)
     #define GRID_MAX_POINTS_X 6
   #else
-    #define GRID_MAX_POINTS_X 5
+    #define GRID_MAX_POINTS_X 4
   #endif
 #elif ENABLED( MeshFine)
   #define GRID_MAX_POINTS_X 8
