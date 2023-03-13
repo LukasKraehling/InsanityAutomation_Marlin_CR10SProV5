@@ -1630,9 +1630,9 @@
     #define DEFAULT_bedKi 1.17
     #define DEFAULT_bedKd 1349.52
   #else
-    #define  DEFAULT_bedKp 79.17
-    #define  DEFAULT_bedKi 12.07
-    #define  DEFAULT_bedKd 346.04
+    #define DEFAULT_bedKp 104.03
+    #define DEFAULT_bedKi 20.48
+    #define DEFAULT_bedKd 352.26
     // #define  DEFAULT_bedKp 690.34
     // #define  DEFAULT_bedKi 111.47
     // #define  DEFAULT_bedKd 1068.83
@@ -3086,7 +3086,7 @@
   #elif ENABLED(MachineCR10SProV2)
     #define X_BED_SIZE 300
     #define Y_BED_SIZE 300
-    #define Z_MAX_POS 340
+    #define Z_MAX_POS 345
     #define X_MAX_POS 302
     #define Y_MAX_POS 280
     #define ClipClearance 2
