@@ -2645,7 +2645,7 @@
 #endif
 
 // X and Y axis travel speed (mm/min) between probes
-#define XY_PROBE_FEEDRATE (300*60)
+#define XY_PROBE_FEEDRATE (275*60)
 
 // Feedrate (mm/min) for the first approach when double-probing (MULTIPLE_PROBING == 2)
 #define Z_PROBE_FEEDRATE_FAST (20*60)
@@ -3089,7 +3089,7 @@
     #define Z_MAX_POS 345
     #define X_MAX_POS 302
     #define Y_MAX_POS 280
-    #define ClipClearance 2
+    #define ClipClearance 0
   #elif ENABLED(MachineCR10SPro)
     #define X_BED_SIZE 300
     #define Y_BED_SIZE 300
