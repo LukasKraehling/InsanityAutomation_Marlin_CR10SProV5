@@ -2200,11 +2200,11 @@
   #define DEFAULT_RETRACT_ACCELERATION  1000    // E acceleration for retracts
   #define DEFAULT_TRAVEL_ACCELERATION   300    // X, Y, Z acceleration for travel (non printing) moves
 #elif (ANY(MachineCR10SPro, MachineCR6, MachineCR6Max, MachineCR30))
-  #define DEFAULT_MAX_FEEDRATE          { 750, 750, 20, 100 }
-  #define DEFAULT_MAX_ACCELERATION      { 1500, 1500, 150, 60 }
-  #define DEFAULT_ACCELERATION          1250    // X, Y, Z and E acceleration for printing moves
+  #define DEFAULT_MAX_FEEDRATE          { 500, 500, 20, 100 }
+  #define DEFAULT_MAX_ACCELERATION      { 1200, 1000, 150, 60 }
+  #define DEFAULT_ACCELERATION          1000    // X, Y, Z and E acceleration for printing moves
   #define DEFAULT_RETRACT_ACCELERATION  1000    // E acceleration for retracts
-  #define DEFAULT_TRAVEL_ACCELERATION   1500    // X, Y, Z acceleration for travel (non printing) moves
+  #define DEFAULT_TRAVEL_ACCELERATION   1200    // X, Y, Z acceleration for travel (non printing) moves
 #elif (ENABLED(MachineCR10Std))
   #define DEFAULT_MAX_FEEDRATE          { 500, 500, 10, 75 }
   #define DEFAULT_MAX_ACCELERATION      { 1500, 1500, 100, 75 }
@@ -3445,7 +3445,7 @@
     #define MESH_TEST_LAYER_HEIGHT   0.2  // (mm) Default layer height for G26.
     #define MESH_TEST_HOTEND_TEMP  205    // (°C) Default nozzle temperature for G26.
     #define MESH_TEST_BED_TEMP      60    // (°C) Default bed temperature for G26.
-    #define G26_XY_FEEDRATE         20    // (mm/s) Feedrate for G26 XY moves.
+    #define G26_XY_FEEDRATE         75    // (mm/s) Feedrate for G26 XY moves.
     #define G26_XY_FEEDRATE_TRAVEL 100    // (mm/s) Feedrate for G26 XY travel moves.
     #define G26_RETRACT_MULTIPLIER   1.0  // G26 Q (retraction) used by default between mesh test elements.
   #endif
