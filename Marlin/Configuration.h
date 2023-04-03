@@ -2202,7 +2202,7 @@
 #elif (ANY(MachineCR10SPro, MachineCR6, MachineCR6Max, MachineCR30))
   #define DEFAULT_MAX_FEEDRATE          { 500, 500, 20, 100 }
   #define DEFAULT_MAX_ACCELERATION      { 1000, 1000, 150, 60 }
-  #define DEFAULT_ACCELERATION          1000    // X, Y, Z and E acceleration for printing moves
+  #define DEFAULT_ACCELERATION          750    // X, Y, Z and E acceleration for printing moves
   #define DEFAULT_RETRACT_ACCELERATION  1000    // E acceleration for retracts
   #define DEFAULT_TRAVEL_ACCELERATION   1000    // X, Y, Z acceleration for travel (non printing) moves
 #elif (ENABLED(MachineCR10Std))
