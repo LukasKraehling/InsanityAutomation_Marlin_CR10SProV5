@@ -2280,7 +2280,7 @@
     #define DEFAULT_XJERK 20.0
     #define DEFAULT_YJERK 20.0
   #else
-    #define DEFAULT_XJERK 20
+    #define DEFAULT_XJERK 15
     #define DEFAULT_YJERK 10
   #endif
   #define DEFAULT_ZJERK  0.3
